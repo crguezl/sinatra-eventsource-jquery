@@ -15,7 +15,8 @@
     </pre>
     <script>
       $("#bottles-button").click(function() {
-        // please code the streaming functionnality here
+        var src = new EventSource('/bottles');
+        src.onmessage = function(e) { $('#bottles-output').append("\n" + e.data) };
       });
     </script>
   </body>
