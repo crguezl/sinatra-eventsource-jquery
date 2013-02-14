@@ -7,11 +7,21 @@ get '/' do
 end
 
 get '/bottles' do
+  # puts params.inspect
+  # puts request.body.read.inspect
+  # puts "Last-Event-Id: #{request.env['HTTP_LAST_EVENT_ID']}"
+
+  start = request.env['HTTP_LAST_EVENT_ID'] ? request.env['HTTP_LAST_EVENT_ID'].to_i+1 : 0
+
   content_type "text/event-stream"
+
   stream do |out|
-    1000.times do |i|
+    start.upto(50) do |i|
+      out << "id: #{i}\n"
       out << "data: #{i} bottle(s) on a wall...\n\n"
-      sleep 0.5
+      sleep 0.3
     end
+    out << "data: CLOSE\n\n"
   end
+
 end
